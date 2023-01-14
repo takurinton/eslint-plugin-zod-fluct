@@ -1,4 +1,4 @@
-import { zodFluct } from "./rules/requireErrorMessage";
+import { zodFluct } from "./rules/zodFluct";
 
 export = {
   rules: {
