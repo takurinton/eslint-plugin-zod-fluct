@@ -1,14 +1,5 @@
 import { TSESLint, TSESTree } from "@typescript-eslint/experimental-utils";
 
-// 作戦を考えた方がいい
-// 1. zod の関数の中身のプロパティを見る(Property)
-// 2. メソッドチェーンの中身を見る(CallExpression)
-
-// とりあえず最低限満たしたいやつ
-// - required_error は必ずつける、optional() がついてたらつけなくていい
-// - invalid_type_error は必ずつける
-// - number() には min() と max() をつける
-
 type Errors =
   | "required_error"
   | "invalid_type_error"
@@ -82,8 +73,6 @@ const isZodObject = (callee: TSESTree.LeftHandSideExpression) =>
   callee.object.type === "Identifier" &&
   callee.object.name === "z";
 
-// 再帰で z に紐づく parent node をリストで取得する
-// node.type を見て条件分岐を追加するべき
 function getParents(node: TSESTree.Node): string[] {
   const parents = [];
   let parent = node.parent;
@@ -143,19 +132,3 @@ const requireErrorMessageIfNotOptional = (
     }
   }
 };
-
-const requiredError = (properties: TSESTree.ObjectLiteralElementLike[]) =>
-  properties.find(
-    (property) =>
-      property.type === "Property" &&
-      property.key.type === "Identifier" &&
-      property.key.name === "required_error"
-  );
-
-const invalidTypeError = (properties: TSESTree.ObjectLiteralElementLike[]) =>
-  properties.find(
-    (property) =>
-      property.type === "Property" &&
-      property.key.type === "Identifier" &&
-      property.key.name === "invalid_type_error"
-  );
