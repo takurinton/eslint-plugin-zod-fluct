@@ -4,7 +4,9 @@ type Errors =
   | "required_error"
   | "invalid_type_error"
   | "not_min_error"
-  | "not_max_error";
+  | "not_max_error"
+  | "not_min_error_message"
+  | "not_max_error_message";
 
 type Messages = {
   [key in Errors]: string;
@@ -15,6 +17,8 @@ const messages: Messages = {
   invalid_type_error: "invalid_type_errorは必ず指定してください",
   not_min_error: "{{ name }}を使用しているときはmin()を必ず指定してください",
   not_max_error: "{{ name }}を使用しているときはmax()を必ず指定してください",
+  not_min_error_message: "min()のエラーメッセージを指定してください",
+  not_max_error_message: "max()のエラーメッセージを指定してください",
 };
 
 export const zodFluct: TSESLint.RuleModule<Errors, []> = {
@@ -43,6 +47,10 @@ export const zodFluct: TSESLint.RuleModule<Errors, []> = {
             case "number":
               parents = getParents(property);
 
+              // require min and max error text
+              requireMinErrorMessage(property, context);
+              requireMaxErrorMessage(property, context);
+
               // require max and min if number
               requireMaxAndMin(property, parents, context, "z.number()");
 
@@ -51,6 +59,10 @@ export const zodFluct: TSESLint.RuleModule<Errors, []> = {
               break;
             case "string":
               parents = getParents(property);
+
+              // require min and max error text
+              requireMinErrorMessage(property, context);
+              requireMaxErrorMessage(property, context);
 
               // require max and min if string
               requireMaxAndMin(property, parents, context, "z.string()");
@@ -88,6 +100,56 @@ const getParents = (node: TSESTree.Node) => {
     parent = parent.parent;
   }
   return parents;
+};
+
+const requireMinErrorMessage = (
+  node: TSESTree.Node,
+  context: TSESLint.RuleContext<Errors, []>
+) => {
+  let parent = node.parent;
+  while (parent) {
+    if (
+      parent.type === "CallExpression" &&
+      parent.callee.type === "MemberExpression" &&
+      parent.callee.property.type === "Identifier" &&
+      parent.callee.property.name === "min"
+    ) {
+      const args = parent.arguments;
+      if (args.length === 1) {
+        context.report({
+          node,
+          messageId: "not_min_error_message",
+        });
+      }
+      break;
+    }
+    parent = parent.parent;
+  }
+};
+
+const requireMaxErrorMessage = (
+  node: TSESTree.Node,
+  context: TSESLint.RuleContext<Errors, []>
+) => {
+  let parent = node.parent;
+  while (parent) {
+    if (
+      parent.type === "CallExpression" &&
+      parent.callee.type === "MemberExpression" &&
+      parent.callee.property.type === "Identifier" &&
+      parent.callee.property.name === "max"
+    ) {
+      const args = parent.arguments;
+      if (args.length === 1) {
+        context.report({
+          node,
+          messageId: "not_max_error_message",
+        });
+      }
+      break;
+    }
+    parent = parent.parent;
+  }
 };
 
 const requireMaxAndMin = (
@@ -134,3 +196,8 @@ const requireErrorMessageIfNotOptional = (
     }
   }
 };
+
+const requireSecondArgumentIfMinAndMax = (
+  node: TSESTree.Node,
+  context: TSESLint.RuleContext<Errors, []>
+) => {};
