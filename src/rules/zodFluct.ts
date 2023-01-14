@@ -6,7 +6,9 @@ type Errors =
   | "not_min_error"
   | "not_max_error"
   | "not_min_error_message"
-  | "not_max_error_message";
+  | "not_max_error_message"
+  | "error_message_must_be_string"
+  | "string_must_have_min_if_not_optional";
 
 type Messages = {
   [key in Errors]: string;
@@ -19,6 +21,9 @@ const messages: Messages = {
   not_max_error: "{{ name }}を使用しているときはmax()を必ず指定してください",
   not_min_error_message: "min()のエラーメッセージを指定してください",
   not_max_error_message: "max()のエラーメッセージを指定してください",
+  error_message_must_be_string: "エラーメッセージは文字列で指定してください",
+  string_must_have_min_if_not_optional:
+    "z.string()はoptional()を使用していない場合はmin()を必ず指定してください",
 };
 
 export const zodFluct: TSESLint.RuleModule<Errors, []> = {
@@ -38,21 +43,26 @@ export const zodFluct: TSESLint.RuleModule<Errors, []> = {
       CallExpression(node) {
         const callExpression = node as TSESTree.CallExpression;
         const callee = callExpression.callee;
-        if (isZodObject(callee)) {
-          // TODO: type safe
-          // @ts-ignore
+        // ここの条件は関数に区切りたいけど区切ると補完効かなくなるので一旦ここに書いている
+        if (
+          callee.type === "MemberExpression" &&
+          callee.property.type === "Identifier" &&
+          callee.object.type === "Identifier" &&
+          callee.object.name === "z"
+        ) {
           const property = callee.property;
           let parents;
           switch (property.name) {
             case "number":
               parents = getParents(property);
 
+              // require max and min if number
+              requireMin(property, parents, context, "z.number()");
+              requireMax(property, parents, context, "z.number()");
+
               // require min and max error text
               requireMinErrorMessage(property, context);
               requireMaxErrorMessage(property, context);
-
-              // require max and min if number
-              requireMaxAndMin(property, parents, context, "z.number()");
 
               // require error message if not optional
               requireErrorMessageIfNotOptional(property, parents, context);
@@ -60,15 +70,16 @@ export const zodFluct: TSESLint.RuleModule<Errors, []> = {
             case "string":
               parents = getParents(property);
 
+              // require max and min if string
+              requireMin(property, parents, context, "z.string()");
+              requireMax(property, parents, context, "z.string()");
+
               // require min and max error text
               requireMinErrorMessage(property, context);
               requireMaxErrorMessage(property, context);
 
-              // require max and min if string
-              requireMaxAndMin(property, parents, context, "z.string()");
-
               // require error message if not optional
-              requireErrorMessageIfNotOptional(property, parents, context);
+              stringMustHaveMinIfNotOptional(property, parents, context);
               break;
             case "object":
               break;
@@ -81,11 +92,6 @@ export const zodFluct: TSESLint.RuleModule<Errors, []> = {
     };
   },
 };
-
-const isZodObject = (callee: TSESTree.LeftHandSideExpression) =>
-  callee.type === "MemberExpression" &&
-  callee.object.type === "Identifier" &&
-  callee.object.name === "z";
 
 const getParents = (node: TSESTree.Node) => {
   const parents = [];
@@ -121,6 +127,12 @@ const requireMinErrorMessage = (
           messageId: "not_min_error_message",
         });
       }
+      if (args.length === 2 && args[1].type !== "Literal") {
+        context.report({
+          node,
+          messageId: "error_message_must_be_string",
+        });
+      }
       break;
     }
     parent = parent.parent;
@@ -146,35 +158,49 @@ const requireMaxErrorMessage = (
           messageId: "not_max_error_message",
         });
       }
+      if (args.length === 2 && args[1].type !== "Literal") {
+        context.report({
+          node,
+          messageId: "error_message_must_be_string",
+        });
+      }
       break;
     }
     parent = parent.parent;
   }
 };
 
-const requireMaxAndMin = (
+const requireMin = (
   node: TSESTree.Node,
   parents: string[],
   context: TSESLint.RuleContext<Errors, []>,
   name?: string
 ) => {
   const hasMin = parents.includes("min");
-  const hasMax = parents.includes("max");
   if (!hasMin) {
     context.report({
       node,
       messageId: "not_min_error",
       data: {
-        name: name || "string",
+        name,
       },
     });
   }
+};
+
+const requireMax = (
+  node: TSESTree.Node,
+  parents: string[],
+  context: TSESLint.RuleContext<Errors, []>,
+  name?: string
+) => {
+  const hasMax = parents.includes("max");
   if (!hasMax) {
     context.report({
       node,
       messageId: "not_max_error",
       data: {
-        name: name || "string",
+        name,
       },
     });
   }
@@ -187,11 +213,29 @@ const requireErrorMessageIfNotOptional = (
 ) => {
   const hasOptional = parents.includes("optional");
   if (!hasOptional) {
+    // parents じゃないよ見るの！property！
     const hasRequiredError = parents.includes("required_error");
     if (!hasRequiredError) {
       context.report({
         node,
         messageId: "required_error",
+      });
+    }
+  }
+};
+
+const stringMustHaveMinIfNotOptional = (
+  node: TSESTree.Node,
+  parents: string[],
+  context: TSESLint.RuleContext<Errors, []>
+) => {
+  const hasOptional = parents.includes("optional");
+  if (!hasOptional) {
+    const hasMin = parents.includes("min");
+    if (!hasMin) {
+      context.report({
+        node,
+        messageId: "string_must_have_min_if_not_optional",
       });
     }
   }
