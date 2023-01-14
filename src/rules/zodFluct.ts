@@ -63,9 +63,6 @@ export const zodFluct: TSESLint.RuleModule<Errors, []> = {
               // require min and max error text
               requireMinErrorMessage(property, context);
               requireMaxErrorMessage(property, context);
-
-              // require error message if not optional
-              requireErrorMessageIfNotOptional(property, parents, context);
               break;
             case "string":
               parents = getParents(property);
@@ -203,24 +200,6 @@ const requireMax = (
         name,
       },
     });
-  }
-};
-
-const requireErrorMessageIfNotOptional = (
-  node: TSESTree.Node,
-  parents: string[],
-  context: TSESLint.RuleContext<Errors, []>
-) => {
-  const hasOptional = parents.includes("optional");
-  if (!hasOptional) {
-    // parents じゃないよ見るの！property！
-    const hasRequiredError = parents.includes("required_error");
-    if (!hasRequiredError) {
-      context.report({
-        node,
-        messageId: "required_error",
-      });
-    }
   }
 };
 
