@@ -3,10 +3,24 @@ import { TSESLint } from "@typescript-eslint/experimental-utils";
 // もう少し丁寧に定義する
 const properties = ["string", "number", "optional"];
 
-export const requireErrorMessage: TSESLint.RuleModule<
-  "required_error" | "invalid_type_error",
-  []
-> = {
+type Errors =
+  | "required_error"
+  | "invalid_type_error"
+  | "not_min_error"
+  | "not_max_error";
+
+type Messages = {
+  [key in Errors]: string;
+};
+
+const messages: Messages = {
+  required_error: "required_errorは必ず指定してください",
+  invalid_type_error: "invalid_type_errorは必ず指定してください",
+  not_min_error: "z.number()を使用しているときはmin()を必ず指定してください",
+  not_max_error: "z.number()を使用しているときはmax()を必ず指定してください",
+};
+
+export const zodFluct: TSESLint.RuleModule<Errors, []> = {
   meta: {
     type: "suggestion",
     docs: {
@@ -15,17 +29,8 @@ export const requireErrorMessage: TSESLint.RuleModule<
       recommended: "error",
       url: "",
     },
-    messages: {
-      required_error: "required_errorは必ず指定してください",
-      invalid_type_error: "invalid_type_errorは必ず指定してください",
-    },
-    schema: [
-      //   {
-      //     type: "object",
-      //     properties: {},
-      //     additionalProperties: false,
-      //   },
-    ],
+    messages,
+    schema: [],
   },
   create: (context) => {
     return {
@@ -36,52 +41,9 @@ export const requireErrorMessage: TSESLint.RuleModule<
 
         const callee = node.callee;
 
-        const isOptional = (() => {
-          if (callee.type === "MemberExpression") {
-            const property = callee.property;
-            if (property.type === "Identifier") {
-              //   console.log(property.name);
-              return property.name === "optional";
-            }
-          }
-          return false;
-        })();
-
-        if (callee.type === "MemberExpression") {
-          const property = callee.property;
-          if (property.type === "Identifier") {
-            if (properties.includes(property.name)) {
-              const args = node.arguments;
-              if (args.length === 1) {
-                const arg = args[0];
-                if (arg.type === "ObjectExpression") {
-                  const properties = arg.properties;
-                  const keys = properties.map((property) => {
-                    if (property.type === "Property") {
-                      const key = property.key;
-                      if (key.type === "Identifier") {
-                        return key.name;
-                      }
-                    }
-                  });
-                  // optionalなプロパティはrequired_errorは不要
-                  // 同じ識別子になるのでどんな感じで管理しようか迷ってる
-                  //   if (isOptional && !keys.includes("required_error")) {
-                  //     context.report({
-                  //       node,
-                  //       messageId: "required_error",
-                  //     });
-                  //   }
-                  if (!keys.includes("invalid_type_error")) {
-                    context.report({
-                      node,
-                      messageId: "invalid_type_error",
-                    });
-                  }
-                }
-              }
-            }
-          }
+        const services = context.parserServices;
+        if (!services) {
+          return;
         }
       },
     };

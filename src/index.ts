@@ -1,8 +1,8 @@
-import { requireErrorMessage } from "./rules/requireErrorMessage";
+import { zodFluct } from "./rules/requireErrorMessage";
 
 export = {
   rules: {
-    "require-error-message": requireErrorMessage,
+    "eslint-plugin-zod-fluct": zodFluct,
   },
   rulesConfig: {
     "require-error-message": 2,
