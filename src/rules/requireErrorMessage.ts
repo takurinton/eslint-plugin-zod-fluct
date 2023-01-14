@@ -73,7 +73,7 @@ const isZodObject = (callee: TSESTree.LeftHandSideExpression) =>
   callee.object.type === "Identifier" &&
   callee.object.name === "z";
 
-function getParents(node: TSESTree.Node): string[] {
+const getParents = (node: TSESTree.Node) => {
   const parents = [];
   let parent = node.parent;
   while (parent) {
@@ -86,7 +86,7 @@ function getParents(node: TSESTree.Node): string[] {
     parent = parent.parent;
   }
   return parents;
-}
+};
 
 const requireMaxAndMin = (
   node: TSESTree.Node,

@@ -21,7 +21,7 @@
   "dependencies": {
     "@typescript-eslint/experimental-utils": "4.15.0"
   },
-  "name": "@takurinton/eslint-plugin-allow-import",
+  "name": "@takurinton/eslint-plugin-zod-fluct",
   "version": "0.0.0",
   "main": "dist/index.js",
   "files": [
@@ -34,7 +34,7 @@
     "url": "git+https://github.com/takurinton/allow-import.git"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "lint": "eslint 'src/playground/**/*.{ts,tsx}'",
     "debug": "yarn build && yarn lint",
     "test": "jest ./src",
