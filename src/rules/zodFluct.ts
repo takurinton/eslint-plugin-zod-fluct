@@ -196,8 +196,3 @@ const requireErrorMessageIfNotOptional = (
     }
   }
 };
-
-const requireSecondArgumentIfMinAndMax = (
-  node: TSESTree.Node,
-  context: TSESLint.RuleContext<Errors, []>
-) => {};
