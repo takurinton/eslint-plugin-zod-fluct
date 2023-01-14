@@ -20,4 +20,9 @@ const schema = z.object({
     .optional(),
 });
 
-schema;
+const safe = schema.safeParse({
+  foo: "foo",
+  bar: 50,
+});
+
+console.log(safe.success);
