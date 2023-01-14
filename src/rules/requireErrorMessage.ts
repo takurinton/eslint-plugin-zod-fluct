@@ -1,5 +1,14 @@
 import { TSESLint, TSESTree } from "@typescript-eslint/experimental-utils";
 
+// 作戦を考えた方がいい
+// 1. zod の関数の中身のプロパティを見る(Property)
+// 2. メソッドチェーンの中身を見る(CallExpression)
+
+// とりあえず最低限満たしたいやつ
+// - required_error は必ずつける、optional() がついてたらつけなくていい
+// - invalid_type_error は必ずつける
+// - number() には min() と max() をつける
+
 type Errors =
   | "required_error"
   | "invalid_type_error"
