@@ -54,6 +54,8 @@ export const zodFluct: TSESLint.RuleModule<Errors, []> = {
 
               // require max and min if string
               requireMaxAndMin(property, parents, context, "z.string()");
+
+              // require error message if not optional
               requireErrorMessageIfNotOptional(property, parents, context);
               break;
             case "object":
