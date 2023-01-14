@@ -1,7 +1,4 @@
-import { TSESLint } from "@typescript-eslint/experimental-utils";
-
-// もう少し丁寧に定義する
-const properties = ["string", "number", "optional"];
+import { TSESLint, TSESTree } from "@typescript-eslint/experimental-utils";
 
 type Errors =
   | "required_error"
@@ -34,17 +31,11 @@ export const zodFluct: TSESLint.RuleModule<Errors, []> = {
   },
   create: (context) => {
     return {
-      CallExpression(node) {
-        if (!/.*\/validation.ts/.test(context.getFilename())) {
-          return;
-        }
-
-        const callee = node.callee;
-
-        const services = context.parserServices;
-        if (!services) {
-          return;
-        }
+      Property(node) {
+        const property = node as TSESTree.Property;
+        const key = property.key as TSESTree.Identifier;
+        const value = property.value as TSESTree.CallExpression;
+        console.log(value);
       },
     };
   },
