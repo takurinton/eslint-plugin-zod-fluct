@@ -23,7 +23,7 @@
     "@typescript-eslint/experimental-utils": "4.15.0"
   },
   "name": "@takurinton/eslint-plugin-zod-fluct",
-  "version": "0.0.0",
+  "version": "0.0.0-beta.1",
   "main": "dist/index.js",
   "files": [
     "dist",
@@ -32,7 +32,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/takurinton/allow-import.git"
+    "url": "git+https://github.com/takurinton/eslint-plugin-zod-fluct.git"
   },
   "scripts": {
     "build": "rm -rf dist && tsc",
