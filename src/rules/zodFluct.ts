@@ -4,6 +4,7 @@ type Errors =
   | "required_error"
   | "invalid_type_error"
   | "not_min_error"
+  | "do_not_use_other_than_min_and_max_if_number"
   | "not_max_error"
   | "not_min_error_message"
   | "not_max_error_message"
@@ -18,6 +19,8 @@ const messages: Messages = {
   required_error: "required_errorは必ず指定してください",
   invalid_type_error: "invalid_type_errorは必ず指定してください",
   not_min_error: "{{ name }}を使用しているときはmin()を必ず指定してください",
+  do_not_use_other_than_min_and_max_if_number:
+    "number()を使用している時はmin()とmax()以外で範囲を指定しないでください",
   not_max_error: "{{ name }}を使用しているときはmax()を必ず指定してください",
   not_min_error_message: "min()のエラーメッセージを指定してください",
   not_max_error_message: "max()のエラーメッセージを指定してください",
@@ -59,6 +62,9 @@ export const zodFluct: TSESLint.RuleModule<Errors, []> = {
               // require max and min if number
               requireMin(property, parents, context, "z.number()");
               requireMax(property, parents, context, "z.number()");
+
+              // do not use other than min and max if number
+              doNotUseOtherThanMinAndMaxIfNumber(property, parents, context);
 
               // require min and max error text
               requireMinErrorMessage(property, context);
@@ -180,6 +186,30 @@ const requireMin = (
       data: {
         name,
       },
+    });
+  }
+};
+
+const doNotUseOtherThanMinAndMaxIfNumber = (
+  node: TSESTree.Node,
+  parents: string[],
+  context: TSESLint.RuleContext<Errors, []>
+) => {
+  const notAllowed = [
+    "gt",
+    "gte",
+    "lt",
+    "lte",
+    "positive",
+    "negative",
+    "nonnegative",
+    "nonpositive",
+  ];
+  const hasNotAllowed = parents.some((parent) => notAllowed.includes(parent));
+  if (hasNotAllowed) {
+    context.report({
+      node,
+      messageId: "do_not_use_other_than_min_and_max_if_number",
     });
   }
 };
