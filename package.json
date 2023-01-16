@@ -23,7 +23,7 @@
     "@typescript-eslint/experimental-utils": "4.15.0"
   },
   "name": "@takurinton/eslint-plugin-zod-fluct",
-  "version": "0.0.0-beta.1",
+  "version": "0.0.0-beta.2",
   "main": "dist/index.js",
   "files": [
     "dist",
