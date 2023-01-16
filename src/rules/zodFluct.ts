@@ -29,7 +29,7 @@ const messages: Messages = {
     "z.string()はoptional()を使用していない場合はmin()を必ず指定してください",
 };
 
-export const zodFluct: TSESLint.RuleModule<Errors, []> = {
+export const zodNumber: TSESLint.RuleModule<Errors, []> = {
   meta: {
     type: "suggestion",
     docs: {
@@ -46,54 +46,78 @@ export const zodFluct: TSESLint.RuleModule<Errors, []> = {
       CallExpression(node) {
         const callExpression = node as TSESTree.CallExpression;
         const callee = callExpression.callee;
-        // ここの条件は関数に区切りたいけど区切ると補完効かなくなるので一旦ここに書いている
         if (
           callee.type === "MemberExpression" &&
           callee.property.type === "Identifier" &&
           callee.object.type === "Identifier" &&
-          callee.object.name === "z"
+          callee.object.name === "z" &&
+          callee.property.name === "number"
         ) {
-          const property = callee.property;
-          let parents;
-          switch (property.name) {
-            case "number":
-              parents = getParents(property);
+          const node = callee.property;
+          const parents = getParents(node);
 
-              // require max and min if number
-              requireMin(property, parents, context, "z.number()");
-              requireMax(property, parents, context, "z.number()");
+          // require max and min if number
+          requireMin(node, parents, context, "z.number()");
+          requireMax(node, parents, context, "z.number()");
 
-              // do not use other than min and max if number
-              doNotUseOtherThanMinAndMaxIfNumber(property, parents, context);
+          // do not use other than min and max if number
+          doNotUseOtherThanMinAndMaxIfNumber(node, parents, context);
 
-              // require min and max error text
-              requireMinErrorMessage(property, context);
-              requireMaxErrorMessage(property, context);
-              break;
-            case "string":
-              parents = getParents(property);
-
-              // require min if string and not optional
-              stringMustHaveMinIfNotOptional(property, parents, context);
-
-              // require max if string
-              requireMax(property, parents, context, "z.string()");
-
-              // require min and max error text
-              requireMinErrorMessage(property, context);
-              requireMaxErrorMessage(property, context);
-              break;
-            case "object":
-              break;
-            // TODO: and more
-            default:
-              break;
-          }
+          // require min and max error text
+          requireMinErrorMessage(node, context);
+          requireMaxErrorMessage(node, context);
         }
       },
     };
   },
 };
+
+export const zodString: TSESLint.RuleModule<Errors, []> = {
+  meta: {
+    type: "suggestion",
+    docs: {
+      category: "Best Practices",
+      description: "",
+      recommended: "error",
+      url: "",
+    },
+    messages,
+    schema: [],
+  },
+  create: (context) => {
+    return {
+      CallExpression(node) {
+        const callExpression = node as TSESTree.CallExpression;
+        const callee = callExpression.callee;
+        if (
+          callee.type === "MemberExpression" &&
+          callee.property.type === "Identifier" &&
+          callee.object.type === "Identifier" &&
+          callee.object.name === "z" &&
+          callee.property.name === "string"
+        ) {
+          const node = callee.property;
+          const parents = getParents(node);
+
+          // require min if string and not optional
+          stringMustHaveMinIfNotOptional(node, parents, context);
+
+          // require max if string
+          requireMax(node, parents, context, "z.string()");
+
+          // require min and max error text
+          requireMinErrorMessage(node, context);
+          requireMaxErrorMessage(node, context);
+        }
+      },
+    };
+  },
+};
+
+// TODO: zodObject
+// TODO: zodArray
+// TODO: zodBoolean
+// TODO: zodUnion
 
 const getParents = (node: TSESTree.Node) => {
   const parents = [];

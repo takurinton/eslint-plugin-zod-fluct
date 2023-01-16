@@ -1,29 +1,19 @@
 import { z } from "zod";
 
 const schema = z.object({
-  // foo: z.string({
-  //   required_error: "foo is required",
-  //   invalid_type_error: "foo must be string",
-  // }),
-  // bar: z
-  //   .number({
-  //     required_error: "bar is required",
-  //     invalid_type_error: "bar must be number",
-  //   })
-  //   .min(0, "0以上のメッセージを入力してください")
-  //   .max(100),
-  hoge: z
-    .number({
-      invalid_type_error: "hoge must be number",
+  id: z.string().max(255, "error message").optional(),
+  name: z
+    .string({
+      required_error: "error message",
     })
-    .min(0, "0以上のメッセージを入力してください")
-    .max(100)
-    .optional(),
+    .min(1, "error message")
+    .max(255, "error message"),
 });
 
 const safe = schema.safeParse({
-  foo: "foo",
-  bar: 50,
+  id:
+    "12345678901234567890123456789012345678901234567890123456789012345678901234567890",
+  name: "takurinton",
 });
 
 console.log(safe.success);

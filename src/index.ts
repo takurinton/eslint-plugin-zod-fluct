@@ -1,10 +1,17 @@
-import { zodFluct } from "./rules/zodFluct";
+import { zodNumber, zodString } from "./rules/zodFluct";
 
 export = {
   rules: {
-    "eslint-plugin-zod-fluct": zodFluct,
+    number: zodNumber,
+    string: zodString,
   },
-  rulesConfig: {
-    "require-error-message": 2,
+  configs: {
+    all: {
+      plugins: ["zod-fluct"],
+      rules: {
+        "zod-fluct/number": "error",
+        "zod-fluct/string": "error",
+      },
+    },
   },
 };

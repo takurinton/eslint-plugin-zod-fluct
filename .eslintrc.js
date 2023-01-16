@@ -17,6 +17,7 @@ module.exports = {
     quotes: ["error", "double"],
     "space-before-blocks": ["error", { functions: "always" }],
     "no-undef": ["off"],
-    "local-rules/eslint-plugin-zod-fluct": "error",
+    "local-rules/number": "error",
+    "local-rules/string": "error",
   },
 };
