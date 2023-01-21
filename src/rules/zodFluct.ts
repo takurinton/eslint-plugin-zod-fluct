@@ -63,15 +63,43 @@ export const zodNumber: TSESLint.RuleModule<Errors, []> = {
           const parents = getParents(node);
 
           // require max and min if number
-          requireMin(node, parents, context, "z.number()");
-          requireMax(node, parents, context, "z.number()");
+          if (!parents.includes("max")) {
+            context.report({
+              node,
+              messageId: "not_min_error",
+              data: { name: "z.number()" },
+            });
+          }
+          if (!parents.includes("min")) {
+            context.report({
+              node,
+              messageId: "not_max_error",
+              data: { name: "z.number()" },
+            });
+          }
 
           // do not use other than min and max if number
-          doNotUseOtherThanMinAndMaxIfNumber(node, parents, context);
-
+          if (doNotUseOtherThanMinAndMaxIfNumber(parents)) {
+            context.report({
+              node,
+              messageId: "do_not_use_other_than_min_and_max_if_number",
+            });
+          }
           // require min and max error text
-          requireMinErrorMessage(node, context);
-          requireMaxErrorMessage(node, context);
+          const minError = requireMinErrorMessage(node);
+          if (minError) {
+            context.report({
+              node,
+              messageId: minError,
+            });
+          }
+          const maxError = requireMaxErrorMessage(node);
+          if (maxError) {
+            context.report({
+              node,
+              messageId: maxError,
+            });
+          }
         }
       },
     };
@@ -106,14 +134,37 @@ export const zodString: TSESLint.RuleModule<Errors, []> = {
           const parents = getParents(node);
 
           // require min if string and not optional
-          stringMustHaveMinIfNotOptional(node, parents, context);
+          if (stringMustHaveMinIfNotOptional(parents)) {
+            context.report({
+              node,
+              messageId: "string_must_have_min_if_not_optional",
+            });
+          }
 
           // require max if string
-          requireMax(node, parents, context, "z.string()");
+          if (!parents.includes("max")) {
+            context.report({
+              node,
+              messageId: "not_max_error",
+              data: { name: "z.string()" },
+            });
+          }
 
           // require min and max error text
-          requireMinErrorMessage(node, context);
-          requireMaxErrorMessage(node, context);
+          const minError = requireMinErrorMessage(node);
+          if (minError) {
+            context.report({
+              node,
+              messageId: minError,
+            });
+          }
+          const maxError = requireMaxErrorMessage(node);
+          if (maxError) {
+            context.report({
+              node,
+              messageId: maxError,
+            });
+          }
         }
       },
     };
@@ -162,10 +213,7 @@ const requireMinErrorMessage = (node: TSESTree.Node) => {
   }
 };
 
-const requireMaxErrorMessage = (
-  node: TSESTree.Node,
-  context: TSESLint.RuleContext<Errors, []>
-) => {
+const requireMaxErrorMessage = (node: TSESTree.Node) => {
   let parent = node.parent;
   while (parent) {
     if (
@@ -176,24 +224,16 @@ const requireMaxErrorMessage = (
     ) {
       const args = parent.arguments;
       if (args.length === 1) {
-        context.report({
-          node,
-          messageId: "not_max_error_message",
-        });
+        return "not_max_error_message";
       }
       if (args.length === 2 && args[1].type !== "Literal") {
-        context.report({
-          node,
-          messageId: "error_message_must_be_string",
-        });
+        return "error_message_must_be_string";
       }
       break;
     }
     parent = parent.parent;
   }
 };
-
-const requireMin = (parents: string[]) => parents.includes("min");
 
 const doNotUseOtherThanMinAndMaxIfNumber = (parents: string[]) => {
   const notAllowed = [
@@ -210,7 +250,5 @@ const doNotUseOtherThanMinAndMaxIfNumber = (parents: string[]) => {
   return parents.some((parent) => notAllowed.includes(parent));
 };
 
-const requireMax = (parents: string[]) => parents.includes("max");
-
 const stringMustHaveMinIfNotOptional = (parents: string[]) =>
-  parents.includes("optional");
+  !(parents.includes("optional") || parents.includes("min"));
