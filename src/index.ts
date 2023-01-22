@@ -1,4 +1,4 @@
-import { zodNumber, zodString } from "./rules/zodFluct";
+import { zodNumber, zodString } from "./rules";
 
 export = {
   rules: {
