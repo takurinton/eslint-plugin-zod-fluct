@@ -1,9 +1,10 @@
-import { zodNumber, zodString } from "./rules";
+import { zodNumber, zodString, zodUtilRules } from "./rules";
 
 export = {
   rules: {
     number: zodNumber,
     string: zodString,
+    utils: zodUtilRules,
   },
   configs: {
     all: {
@@ -11,6 +12,7 @@ export = {
       rules: {
         "zod-fluct/number": "error",
         "zod-fluct/string": "error",
+        "zod-fluct/utils": "error",
       },
     },
   },

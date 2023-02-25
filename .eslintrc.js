@@ -19,5 +19,6 @@ module.exports = {
     "no-undef": ["off"],
     "local-rules/number": "error",
     "local-rules/string": "error",
+    "local-rules/utils": "error",
   },
 };

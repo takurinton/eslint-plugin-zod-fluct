@@ -5,3 +5,4 @@
 
 export { zodNumber } from "./number";
 export { zodString } from "./string";
+export { zodUtilRules } from "./utilRules";
