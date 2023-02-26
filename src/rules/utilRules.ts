@@ -43,7 +43,6 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
   },
   create: (context) => {
     return {
-      // alias check
       CallExpression(node) {
         const callExpression = node as TSESTree.CallExpression;
         const callee = callExpression.callee;
@@ -55,8 +54,8 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
           const node = callee.property;
           const parents = getParents(node);
 
-          const aliassesKeys = Object.keys(aliasses);
-          for (const alias of aliassesKeys) {
+          // alias check
+          for (const alias of Object.keys(aliasses)) {
             if (parents.includes(alias)) {
               context.report({
                 node,
@@ -66,6 +65,7 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
             }
           }
 
+          // do not use methods
           for (const doNotUse of doNotUses) {
             if (parents.includes(doNotUse)) {
               context.report({
