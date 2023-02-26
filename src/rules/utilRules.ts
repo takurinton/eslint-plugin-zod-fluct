@@ -14,11 +14,10 @@ const aliasses = {
   nonnegative: "min(0)",
   negative: "max(-1)",
   nonpositive: "max(0)",
-  // finite: "",
+  finite: "maxとmin",
 
   // https://zod.dev/?id=safeparseasync
   spa: "safeParseAsync",
-  // TODO: ここにエイリアスを追加していく
 } as Record<string, string>;
 
 export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
