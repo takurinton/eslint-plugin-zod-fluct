@@ -51,13 +51,6 @@ export const zodNumber: TSESLint.RuleModule<Errors, []> = {
             });
           }
 
-          // do not use other than min and max if number
-          if (doNotUseOtherThanMinAndMaxIfNumber(parents)) {
-            context.report({
-              node,
-              messageId: "do_not_use_other_than_min_and_max_if_number",
-            });
-          }
           // require min and max error text
           const minError = requireMinErrorMessage(node);
           if (minError) {
