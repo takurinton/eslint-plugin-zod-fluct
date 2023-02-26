@@ -18,4 +18,5 @@ export const messages: Messages = {
     "nullable()とoptional()を使用しない場合はrequired_errorを必ず指定してください",
   not_use_alias:
     "{{ name }}を使用しないでください。変わりに{{ alias }}を使用してください",
+  not_use_method: "{{ name }}は使用しないでください",
 };

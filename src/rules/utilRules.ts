@@ -3,6 +3,7 @@ import { messages } from "./messages";
 import { Errors } from "./types";
 import { getParents } from "./utils";
 
+// alias
 const aliasses = {
   // https://zod.dev/?id=numbers
   gt: "",
@@ -19,6 +20,14 @@ const aliasses = {
   // https://zod.dev/?id=safeparseasync
   spa: "safeParseAsync",
 } as Record<string, string>;
+
+// do not use methods
+const doNotUses = [
+  // https://zod.dev/?id=passthrough
+  "passthrough",
+  // https://zod.dev/?id=strip
+  "strip",
+];
 
 export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
   meta: {
@@ -53,6 +62,16 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
                 node,
                 messageId: "not_use_alias",
                 data: { name: alias, alias: aliasses[alias] },
+              });
+            }
+          }
+
+          for (const doNotUse of doNotUses) {
+            if (parents.includes(doNotUse)) {
+              context.report({
+                node,
+                messageId: "not_use_method",
+                data: { name: doNotUse },
               });
             }
           }

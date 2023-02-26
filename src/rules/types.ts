@@ -10,7 +10,8 @@ export type Errors =
   | "string_must_have_min_if_not_optional"
   | "nullable_and_optional_must_have_invalid_type_error"
   | "not_nullable_and_not_optional_must_have_required_error"
-  | "not_use_alias";
+  | "not_use_alias"
+  | "not_use_method";
 
 export type Messages = {
   [key in Errors]: string;
