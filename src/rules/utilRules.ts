@@ -56,18 +56,6 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
               });
             }
           }
-
-          // for (const alias of aliassesKeys) {
-          //   for (const aliase of aliasses[alias]) {
-          //     if (parents.includes(aliase)) {
-          //       context.report({
-          //         node,
-          //         messageId: "not_use_alias",
-          //         data: { name: alias },
-          //       });
-          //     }
-          //   }
-          // }
         }
       },
     };
