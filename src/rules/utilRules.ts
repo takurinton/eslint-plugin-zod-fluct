@@ -34,6 +34,7 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
   },
   create: (context) => {
     return {
+      // alias check
       CallExpression(node) {
         const callExpression = node as TSESTree.CallExpression;
         const callee = callExpression.callee;
