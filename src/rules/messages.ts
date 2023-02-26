@@ -17,5 +17,6 @@ export const messages: Messages = {
   not_nullable_and_not_optional_must_have_required_error:
     "nullable()とoptional()を使用しない場合はrequired_errorを必ず指定してください",
   // TODO: 使ったエイリアスと変わりに何を使えば良いかを教える
-  not_use_alias: "zodのエイリアスは使用しないでください",
+  not_use_alias:
+    "{{ name }}を使用しないでください。変わりに{{ alias }}を使用してください",
 };

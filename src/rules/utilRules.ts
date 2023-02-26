@@ -4,8 +4,22 @@ import { Errors } from "./types";
 import { getParents } from "./utils";
 
 const aliasses = {
+  // https://zod.dev/?id=numbers
+  gt: "",
+  gte: "min",
+  lt: "",
+  lte: "max",
+  // int: "",
+  positive: "min(1)",
+  nonnegative: "min(0)",
+  negative: "max(-1)",
+  nonpositive: "max(0)",
+  // finite: "",
+
+  // https://zod.dev/?id=safeparseasync
+  spa: "safeParseAsync",
   // TODO: ここにエイリアスを追加していく
-};
+} as Record<string, string>;
 
 export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
   meta: {
@@ -32,13 +46,28 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
           const node = callee.property;
           const parents = getParents(node);
 
-          if (parents.includes("spa")) {
-            context.report({
-              node,
-              messageId: "not_use_alias",
-              // data: { name: "z.string()" },
-            });
+          const aliassesKeys = Object.keys(aliasses);
+          for (const alias of aliassesKeys) {
+            if (parents.includes(alias)) {
+              context.report({
+                node,
+                messageId: "not_use_alias",
+                data: { name: alias, alias: aliasses[alias] },
+              });
+            }
           }
+
+          // for (const alias of aliassesKeys) {
+          //   for (const aliase of aliasses[alias]) {
+          //     if (parents.includes(aliase)) {
+          //       context.report({
+          //         node,
+          //         messageId: "not_use_alias",
+          //         data: { name: alias },
+          //       });
+          //     }
+          //   }
+          // }
         }
       },
     };
