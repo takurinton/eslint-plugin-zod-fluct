@@ -19,6 +19,7 @@ module.exports = {
     // 適用したいルールを追加する
     "@takurinton/zod-fluct/number": "error",
     "@takurinton/zod-fluct/string": "error",
+    "@takurinton/zod-fluct/utils": "error",
   },
 };
 ```
@@ -79,6 +80,27 @@ TODO
 ### refine
 
 TODO
+
+### utils
+
+#### optional
+
+TODO
+
+#### alias
+
+表記ぶれを防ぐために以下のエイリアスを禁止する。
+
+- gt
+- gte
+- lt
+- lte
+- nonnegative
+- positive
+- negative
+- nonpositive
+- finite
+- spa
 
 ## 例
 
