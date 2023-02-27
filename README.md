@@ -35,6 +35,9 @@ module.exports = {
 - [ ] discriminated unions / unions
 - [ ] enum
 - [ ] refine
+- [ ] utils
+  - [ ] optional
+  - [x] alias
 
 ### number
 
@@ -43,8 +46,8 @@ module.exports = {
 - min() と max() 以外の範囲を制限する検証（nonnegative, positive, ...etc）は禁止
   - https://github.com/colinhacks/zod#numbers
 - エラーメッセージは必須
-- エラーメッセージは文字列で
-  - オブジェクトで渡す方法もあるけど表記ブレの意思決定とレビューコストはかけたくないので文字列のみに絞る
+- エラーメッセージはオブジェクトで
+  - 文字列で渡す方法もあるけど表記ブレの意思決定とレビューコストはかけたくないのでオブジェクトのみに絞る
 
 ### string
 
@@ -53,7 +56,7 @@ module.exports = {
   - もしかしたら optional() がある時は required_error の指定を必須にするとかをしたほうがいいかもしれない
 - max() を必ずつける
 - エラーメッセージは必須
-- エラーメッセージはオブジェクト
+- エラーメッセージはオブジェクトで
   - 文字列で渡す方法もあるけど表記ブレの意思決定とレビューコストはかけたくないのでオブジェクトのみに絞る
   - ref https://github.com/colinhacks/zod/issues/97#issuecomment-664178323
 
