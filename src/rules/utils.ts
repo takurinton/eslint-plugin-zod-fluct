@@ -28,7 +28,7 @@ export const requireMinErrorMessage = (node: TSESTree.Node) => {
       if (args.length === 1) {
         return "not_min_error_message";
       }
-      if (args.length === 2 && args[1].type !== "Literal") {
+      if (args.length === 2 && args[1].type === "Literal") {
         return "error_message_must_be_object";
       }
       break;
@@ -50,7 +50,7 @@ export const requireMaxErrorMessage = (node: TSESTree.Node) => {
       if (args.length === 1) {
         return "not_max_error_message";
       }
-      if (args.length === 2 && args[1].type !== "Literal") {
+      if (args.length === 2 && args[1].type === "Literal") {
         return "error_message_must_be_object";
       }
       break;
