@@ -54,6 +54,13 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
           const node = callee.property;
           const parents = getParents(node);
 
+          if (parents.includes("optional") && parents.includes("nullable")) {
+            context.report({
+              node,
+              messageId: "not_use_optional_with_nullable",
+            });
+          }
+
           // alias check
           for (const alias of Object.keys(aliasses)) {
             if (parents.includes(alias)) {

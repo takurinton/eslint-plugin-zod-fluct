@@ -13,4 +13,6 @@ export const messages: Messages = {
   not_use_alias:
     "{{ name }}を使用しないでください。変わりに{{ alias }}を使用してください",
   not_use_method: "{{ name }}は使用しないでください",
+  not_use_optional_with_nullable:
+    "nullable()とoptional()は同時に使用しないでください、代わりにnullish()を使用してください",
 };
