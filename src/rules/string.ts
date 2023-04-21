@@ -39,7 +39,7 @@ export const zodString: TSESLint.RuleModule<Errors, []> = {
           if (stringMustHaveMinIfNotOptional(parents)) {
             context.report({
               node,
-              messageId: "string_must_have_min_if_not_optional",
+              messageId: "string_must_have_min_if_not_nullable",
             });
           }
 

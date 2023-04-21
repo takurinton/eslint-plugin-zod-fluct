@@ -7,7 +7,7 @@ export type Errors =
   | "not_min_error_message"
   | "not_max_error_message"
   | "error_message_must_be_object"
-  | "string_must_have_min_if_not_optional"
+  | "string_must_have_min_if_not_nullable"
   | "nullable_and_optional_must_have_invalid_type_error"
   | "not_nullable_and_not_optional_must_have_required_error"
   | "not_use_alias"
