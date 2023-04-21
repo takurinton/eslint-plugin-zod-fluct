@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const schema = z.object({
-  id: z.string().max(255, { message: "error message" }).optional(),
+  id: z.string().max(255, { message: "error message" }).nullable(),
   name: z
     .string({
       required_error: "error message",
