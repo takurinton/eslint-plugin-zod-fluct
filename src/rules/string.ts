@@ -5,7 +5,7 @@ import {
   getParents,
   requireMaxErrorMessage,
   requireMinErrorMessage,
-  stringMustHaveMinIfNotOptional,
+  stringMustHaveMinIfNotNullable,
 } from "./utils";
 
 export const zodString: TSESLint.RuleModule<Errors, []> = {
@@ -36,7 +36,7 @@ export const zodString: TSESLint.RuleModule<Errors, []> = {
           const parents = getParents(node);
 
           // require min if string and not optional
-          if (stringMustHaveMinIfNotOptional(parents)) {
+          if (stringMustHaveMinIfNotNullable(parents)) {
             context.report({
               node,
               messageId: "string_must_have_min_if_not_nullable",
