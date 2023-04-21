@@ -38,6 +38,7 @@
     "build": "rm -rf dist && tsc",
     "lint": "eslint 'src/playground/**/*.{ts,tsx}'",
     "debug": "yarn build && yarn lint",
+    "runtime": "ts-node ./src/playground/runtime.ts",
     "validate": "ts-node ./src/playground/validation.ts",
     "test": "jest ./src",
     "public": "npm publish --access=public"
