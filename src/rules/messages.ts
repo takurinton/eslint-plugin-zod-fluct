@@ -13,8 +13,8 @@ export const messages: Messages = {
   // ref: https://github.com/colinhacks/zod/issues/97#issuecomment-664178323
   error_message_must_be_object:
     "エラーメッセージはオブジェクトで指定してください",
-  string_must_have_min_if_not_optional:
-    "z.string()はoptional()を使用していない場合はmin()を必ず指定してください",
+  string_must_have_min_if_not_nullable:
+    "z.string()はnullable()を使用していない場合はmin()を必ず指定してください",
   nullable_and_optional_must_have_invalid_type_error:
     "nullable()とoptional()を同時に使用する場合はinvalid_type_errorを必ず指定してください",
   not_nullable_and_not_optional_must_have_required_error:

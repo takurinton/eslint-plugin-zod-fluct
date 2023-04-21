@@ -74,5 +74,5 @@ export const doNotUseOtherThanMinAndMaxIfNumber = (parents: string[]) => {
   return parents.some((parent) => notAllowed.includes(parent));
 };
 
-export const stringMustHaveMinIfNotOptional = (parents: string[]) =>
-  !(parents.includes("optional") || parents.includes("min"));
+export const stringMustHaveMinIfNotNullable = (parents: string[]) =>
+  !(parents.includes("nullable") || parents.includes("min"));
