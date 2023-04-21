@@ -7,6 +7,24 @@ import {
   requireMinErrorMessage,
 } from "./utils";
 
+// alias
+const aliasses = {
+  // https://zod.dev/?id=numbers
+  gt: "",
+  gte: "min",
+  lt: "",
+  lte: "max",
+  // int: "",
+  positive: "min(1)",
+  nonnegative: "min(0)",
+  negative: "max(-1)",
+  nonpositive: "max(0)",
+  finite: "maxとmin",
+
+  // https://zod.dev/?id=safeparseasync
+  spa: "safeParseAsync",
+} as Record<string, string>;
+
 export const zodNumber: TSESLint.RuleModule<Errors, []> = {
   meta: {
     type: "suggestion",
@@ -64,6 +82,17 @@ export const zodNumber: TSESLint.RuleModule<Errors, []> = {
               node,
               messageId: maxError,
             });
+          }
+
+          // alias check
+          for (const alias of Object.keys(aliasses)) {
+            if (parents.includes(alias)) {
+              context.report({
+                node,
+                messageId: "not_use_alias",
+                data: { name: alias, alias: aliasses[alias] },
+              });
+            }
           }
         }
       },
