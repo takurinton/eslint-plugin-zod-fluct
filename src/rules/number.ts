@@ -2,7 +2,6 @@ import { TSESLint, TSESTree } from "@typescript-eslint/experimental-utils";
 import { messages } from "./messages";
 import { Errors } from "./types";
 import {
-  doNotUseOtherThanMinAndMaxIfNumber,
   getParents,
   requireMaxErrorMessage,
   requireMinErrorMessage,
@@ -36,14 +35,14 @@ export const zodNumber: TSESLint.RuleModule<Errors, []> = {
           const parents = getParents(node);
 
           // require max and min if number
-          if (!parents.includes("max")) {
+          if (!parents.includes("min")) {
             context.report({
               node,
               messageId: "not_min_error",
               data: { name: "z.number()" },
             });
           }
-          if (!parents.includes("min")) {
+          if (!parents.includes("max")) {
             context.report({
               node,
               messageId: "not_max_error",
