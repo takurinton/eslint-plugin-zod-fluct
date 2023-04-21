@@ -52,9 +52,8 @@ module.exports = {
 
 ### string
 
-- optional() が指定されてない場合は min() は必ずつける
+- nullable() が指定されてない場合は min() は必ずつける
   - 存在確認は min() を使う
-  - もしかしたら optional() がある時は required_error の指定を必須にするとかをしたほうがいいかもしれない
 - max() を必ずつける
 - エラーメッセージは必須
 - エラーメッセージはオブジェクトで
@@ -82,6 +81,11 @@ TODO
 TODO
 
 ### utils
+
+- nullable と optional は同時に使わない
+  - 代わりに nullish を使う
+- passthrough は使わない
+- strip は使わない
 
 #### optional
 
@@ -115,6 +119,6 @@ const schema = z.number().min(0).max(100);
 // min と max にエラーメッセージがあるのでエラーにならない
 const schema = z
   .number()
-  .min(0, "0以上である必要があります")
-  .max(100, "100以下である必要があります");
+  .min(0, { message: "0以上である必要があります" })
+  .max(100, { message: "100以下である必要があります" });
 ```
