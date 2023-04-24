@@ -52,7 +52,7 @@ module.exports = {
 
 ### string
 
-- nullable() が指定されてない場合は min() は必ずつける
+- nullable() または optional() または nullish() が指定されてない場合は min() は必ずつける
   - 存在確認は min() を使う
 - max() を必ずつける
 - エラーメッセージは必須
