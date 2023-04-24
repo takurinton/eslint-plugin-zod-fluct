@@ -5,12 +5,11 @@ export const schema = z.object({
   num: z
     .number()
     .min(0, { message: "error message" })
-    .max(100, { message: "error message" })
-    .nullable(),
+    .max(100, { message: "error message" }),
   name: z
     .string({
       required_error: "error message",
     })
-    .max(255, { message: "error message" })
-    .optional(),
+    .min(1, { message: "error message" })
+    .max(255, { message: "error message" }),
 });
