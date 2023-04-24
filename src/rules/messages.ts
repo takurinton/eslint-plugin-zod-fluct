@@ -9,7 +9,7 @@ export const messages: Messages = {
   error_message_must_be_object:
     "エラーメッセージはオブジェクトで指定してください",
   string_must_have_min_if_not_nullable:
-    "z.string()はnullable()を使用していない場合はmin()を必ず指定してください",
+    "z.string()はnullable/optional/nullishを使用していない場合はmin()を必ず指定してください",
   not_use_alias:
     "{{ name }}を使用しないでください。変わりに{{ alias }}を使用してください",
   not_use_method: "{{ name }}は使用しないでください",
