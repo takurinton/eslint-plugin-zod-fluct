@@ -19,8 +19,8 @@ it("zodNumber", () => {
         code: `
             const schema = z
             .number()
-            .min(0, { message: '0文字以上で入力してください' })
-            .max(100, { message: '100文字以下で入力してください' });
+            .min(0, { message: '0以上の数字を入力してください' })
+            .max(100, { message: '100以下の数字を入力してください' });
         `,
       },
     ],
@@ -28,7 +28,7 @@ it("zodNumber", () => {
       {
         code: `      
             const schema = z.number()
-                .min(0, { message: '0文字以上で入力してください' });    
+                .min(0, { message: '0以上の数字を入力してください' });    
         `,
         errors: [
           {
@@ -42,7 +42,7 @@ it("zodNumber", () => {
       {
         code: `      
             const schema = z.number()
-                .max(100, { message: '0文字以上で入力してください' });
+                .max(100, { message: '0以上の数字を入力してください' });
         `,
         errors: [
           {
@@ -77,8 +77,8 @@ it("zodNumber", () => {
       {
         code: `      
             const schema = z.number()
-                .min(0, '0文字以上で入力してください')
-                .max(100, '100文字以下で入力してください');
+                .min(0, '0以上の数字を入力してください')
+                .max(100, '100以下の数字を入力してください');
         `,
         errors: [
           {
