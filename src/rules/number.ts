@@ -76,7 +76,7 @@ export const zodNumber: TSESLint.RuleModule<Errors, []> = {
               messageId: minError,
             });
           }
-          const maxError = requireMaxErrorMessage(node);
+          const maxError = requireMaxErrorMessage(context);
           if (maxError) {
             context.report({
               node,
