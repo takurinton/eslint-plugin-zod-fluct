@@ -1,17 +1,20 @@
-import { TSESTree } from "@typescript-eslint/experimental-utils";
+import { TSESLint, TSESTree } from "@typescript-eslint/experimental-utils";
+import { Errors } from "./types";
 
-export const getParents = (node: TSESTree.Node) => {
-  const parents = [];
-  let parent = node.parent;
-  while (parent) {
-    if (
-      parent.type === "MemberExpression" &&
-      parent.property.type === "Identifier"
-    ) {
-      parents.push(parent.property.name);
-    }
-    parent = parent.parent;
-  }
+export const getParents = (context: TSESLint.RuleContext<Errors, []>) => {
+  const ancestors = context.getAncestors();
+  const parents = ancestors
+    .filter(
+      (
+        ancestor
+      ): ancestor is TSESTree.MemberExpression & {
+        property: TSESTree.Identifier;
+      } =>
+        ancestor.type === "MemberExpression" &&
+        ancestor.property.type === "Identifier"
+    )
+    .map((ancestor) => ancestor.property.name);
+
   return parents;
 };
 

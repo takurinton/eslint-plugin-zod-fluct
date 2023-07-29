@@ -50,7 +50,7 @@ export const zodNumber: TSESLint.RuleModule<Errors, []> = {
           callee.property.name === "number"
         ) {
           const node = callee.property;
-          const parents = getParents(node);
+          const parents = getParents(context);
 
           // require max and min if number
           if (!parents.includes("min")) {

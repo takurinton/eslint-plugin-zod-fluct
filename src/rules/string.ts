@@ -33,7 +33,7 @@ export const zodString: TSESLint.RuleModule<Errors, []> = {
           callee.property.name === "string"
         ) {
           const node = callee.property;
-          const parents = getParents(node);
+          const parents = getParents(context);
 
           // require min if string and not optional
           if (stringMustHaveMinIfNotNullable(parents)) {

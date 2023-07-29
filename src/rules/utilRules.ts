@@ -34,7 +34,7 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
           callee.object.type === "Identifier"
         ) {
           const node = callee.property;
-          const parents = getParents(node);
+          const parents = getParents(context);
 
           if (parents.includes("optional") && parents.includes("nullable")) {
             context.report({
