@@ -2,7 +2,7 @@ import { TSESLint, TSESTree } from "@typescript-eslint/experimental-utils";
 import { messages } from "./messages";
 import { Errors } from "./types";
 import {
-  getParents,
+  getZodChainMethods,
   requireMaxErrorMessage,
   requireMinErrorMessage,
 } from "./utils";
@@ -50,17 +50,17 @@ export const zodNumber: TSESLint.RuleModule<Errors, []> = {
           callee.property.name === "number"
         ) {
           const node = callee.property;
-          const parents = getParents(context);
+          const methods = getZodChainMethods(context);
 
           // require max and min if number
-          if (!parents.includes("min")) {
+          if (!methods.includes("min")) {
             context.report({
               node,
               messageId: "not_min_error",
               data: { name: "z.number()" },
             });
           }
-          if (!parents.includes("max")) {
+          if (!methods.includes("max")) {
             context.report({
               node,
               messageId: "not_max_error",
@@ -86,7 +86,7 @@ export const zodNumber: TSESLint.RuleModule<Errors, []> = {
 
           // alias check
           for (const alias of Object.keys(aliasses)) {
-            if (parents.includes(alias)) {
+            if (methods.includes(alias)) {
               context.report({
                 node,
                 messageId: "not_use_alias",

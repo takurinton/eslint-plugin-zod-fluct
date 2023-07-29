@@ -1,7 +1,7 @@
 import { TSESLint, TSESTree } from "@typescript-eslint/experimental-utils";
 import { messages } from "./messages";
 import { Errors } from "./types";
-import { getParents } from "./utils";
+import { getZodChainMethods } from "./utils";
 
 // do not use methods
 const doNotUses = [
@@ -34,9 +34,9 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
           callee.object.type === "Identifier"
         ) {
           const node = callee.property;
-          const parents = getParents(context);
+          const methods = getZodChainMethods(context);
 
-          if (parents.includes("optional") && parents.includes("nullable")) {
+          if (methods.includes("optional") && methods.includes("nullable")) {
             context.report({
               node,
               messageId: "not_use_optional_with_nullable",
@@ -45,7 +45,7 @@ export const zodUtilRules: TSESLint.RuleModule<Errors, []> = {
 
           // do not use methods
           for (const doNotUse of doNotUses) {
-            if (parents.includes(doNotUse)) {
+            if (methods.includes(doNotUse)) {
               context.report({
                 node,
                 messageId: "not_use_method",

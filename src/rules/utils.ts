@@ -1,7 +1,9 @@
 import { TSESLint, TSESTree } from "@typescript-eslint/experimental-utils";
 import { Errors } from "./types";
 
-export const getParents = (context: TSESLint.RuleContext<Errors, []>) => {
+export const getZodChainMethods = (
+  context: TSESLint.RuleContext<Errors, []>
+) => {
   const ancestors = context.getAncestors();
   const parents = ancestors
     .filter(
