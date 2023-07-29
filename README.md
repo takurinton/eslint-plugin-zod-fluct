@@ -6,7 +6,7 @@ fluct で zod を使うための eslint プラグインです。
 ## インストール
 
 ```sh
-yarn add -D @takurinton/eslint-plugin-zod-fluct
+pnpm install -D @takurinton/eslint-plugin-zod-fluct
 ```
 
 ## 使い方
@@ -14,7 +14,7 @@ yarn add -D @takurinton/eslint-plugin-zod-fluct
 ```js
 // .eslintrc.js
 module.exports = {
-  extends: ["plugin:zod-fluct/recommended"],
+  plugins: ["zod-fluct"],
   rules: {
     // 適用したいルールを追加する
     "@takurinton/zod-fluct/number": "error",
@@ -36,9 +36,7 @@ module.exports = {
 - [ ] discriminated unions / unions
 - [ ] enum
 - [ ] refine
-- [ ] utils
-  - [ ] optional
-  - [x] alias
+- [x] utils
 
 ### number
 
@@ -47,8 +45,16 @@ module.exports = {
 - min() と max() 以外の範囲を制限する検証（nonnegative, positive, ...etc）は禁止
   - https://github.com/colinhacks/zod#numbers
 - エラーメッセージは必須
-- エラーメッセージはオブジェクトで
-  - 文字列で渡す方法もあるけど表記ブレの意思決定とレビューコストはかけたくないのでオブジェクトのみに絞る
+- 表記ぶれを防ぐために以下のエイリアスを禁止する。
+  - gt
+  - gte
+  - lt
+  - lte
+  - nonnegative
+  - positive
+  - negative
+  - nonpositive
+  - finite
 
 ### string
 
@@ -56,9 +62,6 @@ module.exports = {
   - 存在確認は min() を使う
 - max() を必ずつける
 - エラーメッセージは必須
-- エラーメッセージはオブジェクトで
-  - 文字列で渡す方法もあるけど表記ブレの意思決定とレビューコストはかけたくないのでオブジェクトのみに絞る
-  - ref https://github.com/colinhacks/zod/issues/97#issuecomment-664178323
 
 ### array
 
@@ -86,29 +89,14 @@ TODO
   - 代わりに nullish を使う
 - passthrough は使わない
 - strip は使わない
-
-#### optional
-
-TODO
-
-#### alias
-
-表記ぶれを防ぐために以下のエイリアスを禁止する。
-
-- gt
-- gte
-- lt
-- lte
-- nonnegative
-- positive
-- negative
-- nonpositive
-- finite
-- spa
+- エラーメッセージはオブジェクトで渡す
+  - ref https://github.com/colinhacks/zod/issues/97#issuecomment-664178323
+- 表記ぶれを防ぐために以下のエイリアスを禁止する。
+  - spa
 
 ## 例
 
-number を使用するときは min() と max() にエラーメッセージを string で渡す.
+number を使用するときは min() と max() にエラーメッセージをオブジェクトで渡す。
 
 ```ts
 import { z } from "zod";
