@@ -2,7 +2,7 @@ import { TSESLint, TSESTree } from "@typescript-eslint/experimental-utils";
 import { messages } from "./messages";
 import { Errors } from "./types";
 import {
-  getParents,
+  getZodChainMethods,
   requireMaxErrorMessage,
   requireMinErrorMessage,
   stringMustHaveMinIfNotNullable,
@@ -33,10 +33,10 @@ export const zodString: TSESLint.RuleModule<Errors, []> = {
           callee.property.name === "string"
         ) {
           const node = callee.property;
-          const parents = getParents(node);
+          const methods = getZodChainMethods(context);
 
           // require min if string and not optional
-          if (stringMustHaveMinIfNotNullable(parents)) {
+          if (stringMustHaveMinIfNotNullable(methods)) {
             context.report({
               node,
               messageId: "string_must_have_min_if_not_nullable",
@@ -44,7 +44,7 @@ export const zodString: TSESLint.RuleModule<Errors, []> = {
           }
 
           // require max if string
-          if (!parents.includes("max")) {
+          if (!methods.includes("max")) {
             context.report({
               node,
               messageId: "not_max_error",
@@ -53,14 +53,14 @@ export const zodString: TSESLint.RuleModule<Errors, []> = {
           }
 
           // require min and max error text
-          const minError = requireMinErrorMessage(node);
+          const minError = requireMinErrorMessage(context);
           if (minError) {
             context.report({
               node,
               messageId: minError,
             });
           }
-          const maxError = requireMaxErrorMessage(node);
+          const maxError = requireMaxErrorMessage(context);
           if (maxError) {
             context.report({
               node,
