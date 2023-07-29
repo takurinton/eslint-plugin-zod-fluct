@@ -22,7 +22,6 @@ export const getZodChainMethods = (
 
 export const requireMinErrorMessage = (
   context: TSESLint.RuleContext<Errors, []>
-  // node: TSESTree.Node
 ) => {
   const ancestors = context.getAncestors();
   const callExpressionAncestor = ancestors.find(
