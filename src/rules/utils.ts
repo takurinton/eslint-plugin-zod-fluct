@@ -18,25 +18,27 @@ export const getParents = (context: TSESLint.RuleContext<Errors, []>) => {
   return parents;
 };
 
-export const requireMinErrorMessage = (node: TSESTree.Node) => {
-  let parent = node.parent;
-  while (parent) {
-    if (
-      parent.type === "CallExpression" &&
-      parent.callee.type === "MemberExpression" &&
-      parent.callee.property.type === "Identifier" &&
-      parent.callee.property.name === "min"
-    ) {
-      const args = parent.arguments;
-      if (args.length === 1) {
-        return "not_min_error_message";
-      }
-      if (args.length === 2 && args[1].type === "Literal") {
-        return "error_message_must_be_object";
-      }
-      break;
+export const requireMinErrorMessage = (
+  context: TSESLint.RuleContext<Errors, []>
+  // node: TSESTree.Node
+) => {
+  const ancestors = context.getAncestors();
+  const callExpressionAncestor = ancestors.find(
+    (ancestor): ancestor is TSESTree.CallExpression =>
+      ancestor.type === "CallExpression" &&
+      ancestor.callee.type === "MemberExpression" &&
+      ancestor.callee.property.type === "Identifier" &&
+      ancestor.callee.property.name === "min"
+  );
+
+  if (callExpressionAncestor) {
+    const args = callExpressionAncestor.arguments;
+    if (args.length === 1) {
+      return "not_min_error_message";
     }
-    parent = parent.parent;
+    if (args.length === 2 && args[1].type === "Literal") {
+      return "error_message_must_be_object";
+    }
   }
 };
 
