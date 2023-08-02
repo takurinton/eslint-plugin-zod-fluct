@@ -14,7 +14,7 @@ pnpm install -D @takurinton/eslint-plugin-zod-fluct
 ```js
 // .eslintrc.js
 module.exports = {
-  plugins: ["zod-fluct"],
+  plugins: ["@takurinton/eslint-plugin-zod-fluct"],
   rules: {
     // 適用したいルールを追加する
     "@takurinton/zod-fluct/number": "error",
