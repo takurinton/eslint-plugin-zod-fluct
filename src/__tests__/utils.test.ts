@@ -3,7 +3,6 @@ import {
   doNotUseOtherThanMinAndMaxIfNumber,
   stringMustHaveMinIfNotNullable,
 } from "../rules/utils";
-import { TSESLint } from "@typescript-eslint/experimental-utils";
 
 describe("Testing TSESTree.Node utilities", () => {
   it("doNotUseOtherThanMinAndMaxIfNumber returns correct boolean", () => {

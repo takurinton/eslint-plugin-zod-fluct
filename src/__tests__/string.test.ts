@@ -1,14 +1,15 @@
-import path from "path";
 import { zodString } from "../rules";
-import { RuleTester } from "eslint";
-import { it } from "vitest";
+import { afterAll, it } from "vitest";
+import { RuleTester } from "@typescript-eslint/rule-tester";
+import { describe } from "node:test";
+
+RuleTester.afterAll = afterAll;
+RuleTester.describe = describe;
+RuleTester.it = it;
 
 it("zodString", () => {
   const ruleTester = new RuleTester({
-    parser: path.resolve(
-      __dirname,
-      "../../node_modules/@typescript-eslint/parser"
-    ),
+    parser: "@typescript-eslint/parser",
   });
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
