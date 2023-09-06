@@ -2,11 +2,11 @@
   "compilerOptions": {
     "jsx": "react",
     "target": "es2020",
-    "module": "commonjs",
+    "module": "Node16",
     "outDir": "./dist",
     "strict": true,
     "lib": ["es6", "dom", "ESNext"],
-    "moduleResolution": "node",
+    "moduleResolution": "Node16",
     "esModuleInterop": true,
     "skipLibCheck": true
   },
